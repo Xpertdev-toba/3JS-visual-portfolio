@@ -1,3 +1,72 @@
-# Set the default behavior, in case people don't have core.autocrlf set.
-* text=auto
+# Auto detect text files and perform LF normalization
+* text=auto eol=lf
 
+# Source files
+*.js text eol=lf
+*.ts text eol=lf
+*.jsx text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+*.scss text eol=lf
+*.html text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Config files
+*.config.js text eol=lf
+.gitignore text eol=lf
+.gitattributes text eol=lf
+.editorconfig text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+
+# Windows specific
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Binary files - do not modify
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.avif binary
+
+# 3D Models - binary
+*.glb binary
+*.gltf binary
+*.obj binary
+*.fbx binary
+*.stl binary
+*.dae binary
+
+# Audio - binary
+*.mp3 binary
+*.wav binary
+*.ogg binary
+
+# Video - binary
+*.mp4 binary
+*.webm binary
+
+# Fonts - binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.otf binary
+
+# Compressed files
+*.zip binary
+*.tar binary
+*.gz binary
+
+# Large File Storage (uncomment if using Git LFS)
+# *.glb filter=lfs diff=lfs merge=lfs -text
+# *.gltf filter=lfs diff=lfs merge=lfs -text
+# *.hdr filter=lfs diff=lfs merge=lfs -text
