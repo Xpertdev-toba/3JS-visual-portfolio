@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Interactive 3D Portfolio - Explore my work in an immersive 3D experience">
+  <meta name="theme-color" content="#0a0a15">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TobaTech Jungle - 3D Portfolio">
+  <meta property="og:description" content="Interactive 3D Portfolio built with Three.js — Explore projects in an immersive jungle world">
+  <meta property="og:image" content="./og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TobaTech Jungle - 3D Portfolio">
+  <meta name="twitter:description" content="Interactive 3D Portfolio built with Three.js">
+  
+  <title>TobaTech Jungle - 3D Portfolio</title>
+  <script type="module" crossorigin src="/portfolio-3js/assets/index-B8wUnNs8.js"></script>
+  <link rel="modulepreload" crossorigin href="/portfolio-3js/assets/three-BrkffKlN.js">
+  <link rel="modulepreload" crossorigin href="/portfolio-3js/assets/physics-BLW-AYWc.js">
+  <link rel="stylesheet" crossorigin href="/portfolio-3js/assets/index-B2z3zRoT.css">
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-bar">
+      <div class="loading-bar-fill" id="loading-bar-fill"></div>
+    </div>
+    <p class="loading-text">Loading Experience...</p>
+  </div>
+
+  <!-- Main Canvas -->
+  <canvas class="webgl" id="webgl"></canvas>
+
+  <!-- HUD Header -->
+  <header class="hud-header">
+    <div class="hud-left">
+      <div class="logo glass-panel">
+        <div class="logo-icon">✦</div>
+        <span class="logo-text">Portfolio</span>
+      </div>
+    </div>
+    <div class="hud-center">
+      <button class="env-toggle" id="env-toggle" title="Toggle Environment">
+        <span class="env-toggle-label" id="env-toggle-label">🧪 Test</span>
+      </button>
+    </div>
+    <div class="hud-right">
+      <div class="hud-buttons">
+        <button class="hud-button" id="btn-time" title="Time of Day">☀</button>
+        <button class="hud-button" id="btn-audio" title="Toggle Audio">🔊</button>
+        <button class="hud-button" id="btn-settings" title="Settings">⚙</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Time Control Panel -->
+  <div class="time-control" id="time-control">
+    <div class="time-control-label">Time of Day</div>
+    <div class="time-presets">
+      <button class="time-preset" data-preset="dawn">Dawn</button>
+      <button class="time-preset" data-preset="morning">Morning</button>
+      <button class="time-preset active" data-preset="noon">Noon</button>
+      <button class="time-preset" data-preset="afternoon">Afternoon</button>
+      <button class="time-preset" data-preset="dusk">Dusk</button>
+      <button class="time-preset" data-preset="night">Night</button>
+    </div>
+  </div>
+
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settings-panel">
+    <div class="settings-title">Settings</div>
+    
+    <div class="settings-group">
+      <div class="settings-label">
+        <span>Graphics Quality</span>
+        <span class="settings-value" id="quality-value">High</span>
+      </div>
+      <input type="range" class="glass-slider" id="quality-slider" min="0" max="2" value="2">
+    </div>
+    
+    <div class="settings-group">
+      <div class="settings-label">
+        <span>Master Volume</span>
+        <span class="settings-value" id="volume-value">70%</span>
+      </div>
+      <input type="range" class="glass-slider" id="volume-slider" min="0" max="100" value="70">
+    </div>
+    
+    <div class="settings-row">
+      <span>Auto Day/Night Cycle</span>
+      <div class="glass-toggle" id="toggle-cycle"></div>
+    </div>
+    
+    <div class="settings-row">
+      <span>Show FPS</span>
+      <div class="glass-toggle" id="toggle-fps"></div>
+    </div>
+  </div>
+
+  <!-- Portal UI -->
+  <div class="portal-ui" id="portal-ui">
+    <div class="portal-card glass-panel">
+      <h3 class="portal-title" id="portal-title">Project Name</h3>
+      <p class="portal-description" id="portal-description">Project description goes here.</p>
+      <div class="portal-actions">
+        <button class="glass-button" id="portal-close">Close</button>
+        <button class="glass-button primary" id="portal-enter">Enter ▸</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Modal -->
+  <div class="glass-modal-overlay" id="project-modal">
+    <div class="glass-modal project-modal">
+      <div class="project-modal-header">
+        <h2 class="project-modal-title" id="modal-title">Project</h2>
+        <button class="project-modal-close" id="modal-close">✕</button>
+      </div>
+      <div class="project-iframe-container">
+        <iframe id="project-iframe" src="about:blank" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Stats -->
+  <div class="perf-stats" id="perf-stats">
+    FPS: <span id="fps-counter">60</span>
+  </div>
+
+  <!-- Notification Container -->
+  <div class="notification-container" id="notification-container"></div>
+
+  <!-- UI Overlay (Desktop Controls) -->
+  <div class="ui-overlay">
+    <div class="instructions" id="instructions">
+      <h3>Controls</h3>
+      <p><span class="key">W</span><span class="key">A</span><span class="key">S</span><span class="key">D</span> or Arrow keys to move</p>
+      <p><span class="key">SPACE</span> to jump</p>
+      <p><span class="key">F</span> toggle bird's-eye view</p>
+      <p>Mouse drag to rotate camera</p>
+      <p>Scroll to zoom in/out</p>
+    </div>
+  </div>
+
+</body>
+</html>
