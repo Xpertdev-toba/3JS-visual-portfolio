@@ -3,6 +3,7 @@ import { Environment } from './Environment.js'
 import { Player } from './Player.js'
 import { TestEnvironment } from './TestEnvironment.js'
 import { ForestEnvironment } from './ForestEnvironment.js'
+import { PortfolioShowcase } from '../Systems/PortfolioShowcase.js'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js'
 
@@ -25,6 +26,9 @@ export class World {
     this.forestModel = null
     this.forestLoading = false
 
+    // Portfolio showcase system (world-space UI panels)
+    this.portfolioShowcase = null
+
     // Zone tracking
     this.currentZone = null
     this.visitedZones = new Set(['HUB'])
@@ -45,6 +49,10 @@ export class World {
     this.disposeCurrentEnvironment()
     this.activeMode = 'test'
     this.activeEnvironment = new TestEnvironment()
+    
+    // Initialize portfolio showcase with world-space UI panels
+    this.portfolioShowcase = new PortfolioShowcase(this.activeEnvironment.zones)
+    
     this.player.teleport({ x: 0, y: 2, z: 5 })
     console.log('🧪 Switched to Test Environment')
     this.updateToggleUI()
@@ -117,6 +125,10 @@ export class World {
   }
 
   disposeCurrentEnvironment() {
+    if (this.portfolioShowcase) {
+      this.portfolioShowcase.dispose()
+      this.portfolioShowcase = null
+    }
     if (this.activeEnvironment) {
       this.activeEnvironment.dispose()
       this.activeEnvironment = null
@@ -151,6 +163,11 @@ export class World {
     // Update environment (sync dynamic objects)
     if (this.activeEnvironment) {
       this.activeEnvironment.update(deltaTime)
+    }
+
+    // Update portfolio showcase (world-space UI panels)
+    if (this.portfolioShowcase) {
+      this.portfolioShowcase.update(deltaTime)
     }
   }
 
@@ -187,6 +204,7 @@ export class World {
   destroy() {
     this.disposeCurrentEnvironment()
     this.player?.dispose()
+    this.environment?.dispose?.()
     window.removeEventListener('toggleEnvironment', this._onToggle)
   }
 }
